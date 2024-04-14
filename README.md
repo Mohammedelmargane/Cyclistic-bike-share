@@ -328,4 +328,4 @@ Cyclistic can leverage various digital media channels to reach and influence cas
 
 By leveraging a mix of digital marketing strategies, Cyclistic can effectively reach and convert casual riders into loyal annual members, ultimately driving the company’s long-term success.
 
-> So this was my approach to this case study I hope you enjoyed it and thank you for reading till the end
+***So this was my approach to this case study I hope you enjoyed it and thank you for reading till the end***
