@@ -44,7 +44,7 @@ As a disclaimer, the data has been made available by Motivate International Inc.
 
 we are not going to convert the csv files to xlsx because we can just import the csv files into RStudio using read.csv but before that, we need to install and load the required packages.
 
-'''
+```
 #installing the required packages
 install.packages('tidyverse')
 install.packages('janitor')
@@ -57,7 +57,7 @@ library(janitor)
 library(lubridate)
 library(readr)
 library(ggplot2)
-'''
+```
 
 ## ***Process***
 
@@ -70,7 +70,7 @@ then i used read.csv to import all the files into RStudio and also renamed all t
 
 R is case sensitive so make sure you name everything with consistency don’t make my mistake with the first CSV having all small names “mar2023” and the others with a capital first letter
 
-'''
+```
 # Upload Divvy datasets (CSV files) here
  mar2023 <- read.csv("Divvy_TripData/202303.csv")
  Apr2023 <- read.csv("Divvy_TripData/202304.csv")
@@ -84,10 +84,10 @@ R is case sensitive so make sure you name everything with consistency don’t ma
  Dec2023 <- read.csv("Divvy_TripData/202312.csv")
  Jan2024 <- read.csv("Divvy_TripData/202401.csv")
  Feb2024 <- read.csv("Divvy_TripData/202402.csv")
- '''
+ ```
  
 ### Step 2 is to merge all the files into one dataset but before that, we need to check for any Data Types error and make sure that all the files have identical Data Types using ‘str()’
-'''
+```
 #checking data types
 str(mar2023)
 str(Apr2023)
@@ -101,57 +101,57 @@ str(Nov2023)
 str(Dec2023)
 str(Jan2024)
 str(Feb2024)
-'''
+```
 
 check for any data errors and make sure that everything is the same type then move to the next step merging them into one dataset
-'''
+```
 ##Creating new dataset name
 merged_df <- bind_rows(mar2023, Apr2023, May2023, Jun2023, Jul2023, 
 Aug2023, Sep2023, Oct2023, Nov2023, Dec2023, Jan2024, Feb2024)
 I merge all the files into one Data Frame I called Merged_df using ‘bind_rows’
-'''
+```
 
 After we created the merged data frame, we should clean it by removing any spaces, parentheses, and removing empty columns. Using ‘clean_names’ & ‘remove_empty’
-'''
+```
 #Cleaning & removing any spaces
 merged_df <- clean_names(merged_df)
 #removing_empty
 remove_empty(merged_df, which = c())
-'''
+```
 
 ### STEP 3: CLEAN UP AND ADD DATA TO PREPARE FOR ANALYSIS
 
 The data can only be aggregated at the ride level, which is too granular. We will want to add some additional columns of data — such as day, month, and year — that provide additional opportunities to aggregate the data.
-'''
+```
 merged_df$date <- as.Date(merged_df$started_at) #The default format is yyyy-mm-dd
 merged_df$month <- format(as.Date(merged_df$date), "%m")
 merged_df$day <- format(as.Date(merged_df$date), "%d")
 merged_df$year <- format(as.Date(merged_df$date), "%Y")
 merged_df$day_of_week <- format(as.Date(merged_df$date), "%A")
-'''
+```
 
 not let’s Add a “ride_length” calculation to merged_df (in seconds) by subtracting “ended_at” from “started_at” and naming the new columns “ride_length”
 
 the “started_at” and “ended_at” columns were formatted as “Chr” and to do this calculation we need to convert them into “.POSIXct”
 
-'''
+```
 merged_df$started_at <- as.POSIXct(merged_df$started_at)
 merged_df$ended_at <- as.POSIXct(merged_df$ended_at)
-'''
+```
 
 now let’s create a new column called “ride_length” using “difftime”
-'''
+```
 merged_df$ride_length <- as.numeric(difftime(merged_df$ended_at , 
 merged_df$started_at , units = "secs"))
-'''
+```
 
 after looking at the new data “ride_lenght” I found that there are some rides where trip duration shows up as negative, including several hundred rides where Divvy took bikes out of circulation for Quality Control reasons. We will want to delete these rides.
 
 to do this I will create a new version of the dataframe (v2) since data is being removed
-'''
+```
 merged_df_v2 <- merged_df[!(merged_df$start_station_name == 
 "HQ QR" | merged_df$ride_length<0),]
-'''
+```
 
 > For clarity, we’re essentially creating a new dataframe called “merged_df_v2” from “merged_df” that excludes trip durations of 0 seconds or less.
 
@@ -161,65 +161,65 @@ merged_df_v2 <- merged_df[!(merged_df$start_station_name ==
 
 I calculated the average ride length overall and the average ride length by casuals & members and the max and median ride length
 
-'''
+```
 #Calculating the average ride length
 average_ride_length <- mean(merged_df_v2$ride_length)
-'''
+```
 
 ![Average Ride Length](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/average%20ride%20length.png)
 
 
-'''
+```
 #Calculating the average ride length by members & casuals
 avg_ride_length_by_member_casual <- aggregate(ride_length ~ member_casual 
 , data = merged_df_v2, FUN = mean)
-'''
+```
 
 ![Average Ride Length by members & casuals](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/average%20ride%20length%20by%20members%20%26%20casuals.png)
 
 
 we can clearly see that casual members almost spend double the amount of time using the bikes as compared to annual members!
 
-'''
+```
 #Calculating the rides by day of the week
 rides_by_day_of_week <- aggregate(ride_id ~ day_of_week, 
 data = merged_df_v2, FUN = length)
-'''
+```
 
 ![Rides by day of the week](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/rides%20by%20day%20of%20the%20week.png)
 
 
 Notice that the days of the week are out of order. Let’s fix that.
-'''
+```
 merged_df_v2$day_of_week <- ordered(amerged_df_v2$day_of_week, 
 levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
-'''
+```
 
 Finally, we created the max and median ride length
-'''
+```
 #Calculating the max ride length
 max_ride_length <- max(merged_df_v2$ride_length)
-'''
+```
 ![max ride length](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/the%20max%20ride%20length.png)
 
-'''
+```
 #Calculating the median ride length
 median_ride_length <- median(merged_df_v2$ride_length)
-'''
+```
 ![Median ride length](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/the%20median%20ride%20length.png)
 
 Then I calculated which type of Rideable is most used by members and casuals
-'''
+```
 #Calculating the most rideable type
 rideable_table <- table(merged_df_v2$rideable_type, 
 merged_df_v2$member_casual)
-'''
+```
 
 ![Most rideable type](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/the%20most%20rideable%20type.png)
 
 
 Now let’s analyze ridership data by type and weekday
-'''
+```
 merged_df_v2 %>% 
   mutate(weekday = wday(started_at, label = TRUE)) %>%  
                           #creates weekday field using wday()
@@ -231,7 +231,7 @@ merged_df_v2 %>%
                           # calculates the average duration
           arrange(member_casual, weekday) 
                             #sorts
- '''          
+ ```          
 
  ![ridership data by type and weekday](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/ridership%20data%20by%20type%20and%20weekday.png)
 
@@ -241,7 +241,7 @@ merged_df_v2 %>%
 And now to the fun part at least for me which is visualizing
 
 Let’s Visualize the Number Of Rides by member & casual
-'''
+```
 merged_df_v2 %>% 
     mutate(weekday = wday(started_at, label = TRUE)) %>% 
     group_by(member_casual, weekday) %>% 
@@ -252,7 +252,7 @@ merged_df_v2 %>%
     geom_col(position = "dodge") +  
     labs(x = "Weekday" , y = " Number Of Rides") + 
     scale_fill_manual(values = c("member" = " #89ABE3" , "casual" = " #EA738D"))
- '''
+ ```
 I will not be explaining every line of code for the visualization but basically, we are going to use ggplot for our visualisation so I set the “x” axis to be the (weekday) and the “y” axis to be (number of rides) while using member_casual as fill I used the command “labs” to name the “x” axis and the “y” axis and the “scale_fill_manual” for colours
 
 >The colours are
@@ -263,7 +263,7 @@ I will not be explaining every line of code for the visualization but basically,
  ![Visualize the Number Of Rides by member & casual](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/312180f980c37d58f21ee53d770718bf73abbbdf/images/Screenshot%202024-04-12%20224703.png)
 
 **Average Ride Duration by member & casual**
-'''
+```
  merged_df_v2 %>% 
      mutate(weekday = wday(started_at, label = TRUE)) %>% 
      group_by(member_casual, weekday) %>% 
@@ -274,7 +274,7 @@ I will not be explaining every line of code for the visualization but basically,
      geom_col(position = "dodge") +
      labs(x = "Weekday" , y = " Average Ride Duration") +
      scale_fill_manual(values = c("member" = "#89ABE3" , "casual" = "#EA738D"))
-  '''
+  ```
 
 ![Average Ride Duration by member & casual](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/8c707cf3f55163281cc6cc1c061f3a9fc44c0693/images/Average%20Ride%20Duration%20by%20member%20%26%20casual.png)
 
@@ -285,13 +285,13 @@ Conversely, ridership among casual members tends to be low during the weekdays b
 
 We need to check for the popular stations for casuals so we can target those stations for our ads,
 To find the most used stations by casuals, you can filter the dataframe by member_casual and then calculate the counts for casuals and arrange them by Desc order
-'''
+```
 casual_start_stations_count <- merged_df_v2 %>%
     filter(member_casual == "casual" & start_station_name != "") %>%
      group_by (start_station_name) %>%
      summarise(num_rides_started_by_casual = n()) %>%
      arrange(desc(num_rides_started_by_casual))
-'''
+```
 ![Top 10 stations by casuals](https://github.com/Mohammedelmargane/Cyclistic-bike-share/blob/8c707cf3f55163281cc6cc1c061f3a9fc44c0693/images/Top%2010%20papular%20stations%20for%20casuals.png)
 
 
