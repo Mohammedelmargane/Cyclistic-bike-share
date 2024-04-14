@@ -38,7 +38,7 @@ Guiding questions that will help us keep the business goal clear
 
 ## ***Prepare***
 
-We will use Cyclistic’s historical trip data to analyze and identify trends. ([Here]([url](https://divvy-tripdata.s3.amazonaws.com/index.html))) we will download the last 12 months of data From Mars 2023 till February 2024 and will extract all the CSV files into one folder and name it “Divvy_TripData”
+We will use Cyclistic’s historical trip data to analyze and identify trends. [Here](https://divvy-tripdata.s3.amazonaws.com/index.html) we will download the last 12 months of data From Mars 2023 till February 2024 and will extract all the CSV files into one folder and name it “Divvy_TripData”
 
 As a disclaimer, the data has been made available by Motivate International Inc. under this license
 
@@ -299,13 +299,13 @@ casual_start_stations_count <- merged_df_v2 %>%
 
 Now let’s answer the questions we had
 
-1 How do annual members and casual riders use Cyclistic bikes differently?
+**1 How do annual members and casual riders use Cyclistic bikes differently?**
 * **Ride Length**: On average, casual riders have much longer ride lengths compared to annual members. For example, on Fridays, the average ride length for casual riders is 1640.88 seconds, while for annual members it is 756.66 seconds.
 * **Day of Week Usage**: Casual riders seem to use the bikes more on weekends (Saturday and Sunday), with the longest average ride lengths on those days. Annual members, on the other hand, have more consistent usage across all days of the week.
 
 These insights suggest that casual riders tend to use the bikes for longer recreational rides, potentially on weekends, while annual members use the bikes more for shorter, utilitarian trips throughout the week.
 
-2 Why would casual riders buy Cyclistic annual memberships?
+**2 Why would casual riders buy Cyclistic annual memberships?**
 
 There are a few potential reasons why casual riders may want to purchase Cyclistic annual memberships:
 
@@ -316,7 +316,7 @@ There are a few potential reasons why casual riders may want to purchase Cyclist
 
 By understanding the motivations and pain points of casual riders, Cyclistic can design its annual membership offering to be more appealing and valuable to this target group.
 
-3 How can Cyclistic use digital media to influence casual riders to become members?
+**3 How can Cyclistic use digital media to influence casual riders to become members?**
 
 Cyclistic can leverage various digital media channels to reach and influence casual riders to become annual members:
 
