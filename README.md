@@ -1,4 +1,4 @@
-# Cyclistic-bike-share
+# Google Data Analytics Case Study (in RStudio)
 Hey there! I’ve spent the past month diving into the Google Data Analytics Professional Certificate on Coursera. It’s been quite the journey — challenging and stressful at points, but incredibly rewarding in terms of learning.
 
 In this article, I’ll be sharing my approach to a particular case study. For my toolkit, I’ll be focusing on RStudio and Excel.
